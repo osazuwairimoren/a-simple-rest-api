@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>api testing</title>
+    </head>
+    <body>
+        <h2>hello world</h2>
+        <button onclick="fetchFun()">fetch</button>
+        <button onclick="postFun()">post</button><br> <br>
+        <button onclick="putFun()">update</button>
+        <button onclick="deleteFun()">delete</button>
+        <form
+            action="http://localhost:5000/api/search"
+            method="get"
+            target="_blank"
+        >
+            <br />
+            <input type="search" name="name" id="search" />
+            <input type="submit" value="Submit" />
+        </form>
+        <p id="spann"></p>
+    </body>
+    <script>
+        let search = document.querySelector("#search");
+        search.oninput = function () {
+            fetch(`http://localhost:5000/api/searchapi?name=${search.value}`)
+                .then((Response) => {
+                    return Response.json();
+                })
+                .then((data) => {
+                    var text = "";
+                    for (let i = 0; i < data.length; i++) {
+                        text = text + data[i].name + "<br>";
+                        document.getElementById("spann").innerHTML = text;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        };
+        function postFun() {
+            let bodyy = {
+                name: "new user",
+                age: 19,
+                height: "5.5ft",
+            };
+            fetch("http://localhost:5000/api/members", {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(bodyy),
+            })
+                .then((Response) => {
+                    return Response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+        function fetchFun() {
+            fetch("http://localhost:5000/api/members")
+                .then((Response) => {
+                    return Response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+        function putFun() {
+            let bodyy = {
+                name: "newUser",
+                age: 19,
+                height: "5.5ft",
+            };
+            fetch("http://localhost:5000/api/members/1", {
+                method: "PUT",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(bodyy),
+            })
+                .then((Response) => {
+                    return Response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+        function deleteFun() {
+            fetch("http://localhost:5000/api/members/1", {
+                method: "DELETE",
+            })
+                .then((Response) => {
+                    return Response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    </script>
+</html>
